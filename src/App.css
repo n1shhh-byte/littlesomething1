@@ -457,8 +457,10 @@ button:focus-visible {
   width: 100%;
 
   padding:
-    90px 0
+    90px 20px
     140px;
+
+  box-sizing: border-box;
 
   pointer-events: none;
 }
@@ -487,18 +489,29 @@ button:focus-visible {
   pointer-events: none;
 }
 
+/* =========================================================
+   FIXED PAPER CENTERING
+========================================================= */
+
 .paper {
   position: relative;
 
-  left: 50%;
+  /* IMPORTANT:
+     No left: 50%
+     No negative margin
+     The paper is centered naturally by auto margins.
+  */
 
-  width: min(620px, 88vw);
+  width: min(620px, 100%);
 
-  margin-left: -310px;
+  margin-left: auto;
+  margin-right: auto;
 
   padding:
     clamp(36px, 6vw, 66px)
     clamp(26px, 6vw, 62px);
+
+  box-sizing: border-box;
 
   background:
     linear-gradient(
@@ -876,8 +889,6 @@ button:focus-visible {
   pointer-events: none;
 }
 
-/* Little speech-bubble triangle */
-
 .kuromi-prompt::after {
   content: "";
 
@@ -895,8 +906,6 @@ button:focus-visible {
   border-top-color:
     var(--cream);
 }
-
-/* Show the bubble */
 
 .kuromi.near .kuromi-prompt {
   opacity: 1;
@@ -1333,12 +1342,10 @@ button:focus-visible {
   }
 
   .paper {
-    left: 0;
+    width: min(620px, 100%);
 
     margin-left: auto;
     margin-right: auto;
-
-    width: min(620px, 88vw);
 
     box-sizing: border-box;
   }
@@ -1347,14 +1354,19 @@ button:focus-visible {
 @media (max-width: 700px) {
   .letter-scene {
     padding:
-      50px 0 90px;
+      50px 14px 90px;
   }
 
   .paper {
-    width: calc(100vw - 28px);
+    width: 100%;
+
+    margin-left: auto;
+    margin-right: auto;
 
     padding:
       34px 22px;
+
+    box-sizing: border-box;
 
     border-radius: 12px;
   }
