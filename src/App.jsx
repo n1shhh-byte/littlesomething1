@@ -175,13 +175,11 @@ export default function App() {
               initial={{
                 opacity: 0,
                 y: 120,
-                x: "-50%",
                 scale: 0.94,
               }}
               animate={{
                 opacity: 1,
                 y: 0,
-                x: "-50%",
                 scale: 1,
               }}
               transition={{
