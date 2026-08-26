@@ -286,9 +286,6 @@ button:focus-visible {
   pointer-events: none;
 }
 
-/* PAPER CENTERING — .paper centers itself via width + auto margins.
-   It must NOT also get a translateX(-50%) from JS (that was the bug). */
-
 .paper {
   position: relative;
   width: min(620px, 100%);
@@ -365,8 +362,6 @@ button:focus-visible {
   color: #4a4438;
   margin-bottom: 0;
 }
-
-/* CHARACTERS — centered flex row instead of pushed outside the paper */
 
 .char-slot {
   position: relative;
@@ -824,23 +819,40 @@ button:focus-visible {
   .kitty,
   .kuromi {
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     width: 112px;
     max-width: 112px;
     height: auto;
     margin: 0 auto;
   }
 
+  /* Bubble no longer floats absolutely over the paragraph above —
+     it now sits in normal flow above the character (order: -1),
+     which is what fixes the mobile text-overlap issue. */
+
   .kitty-bubble,
   .kuromi-prompt {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
     max-width: 70vw;
     white-space: normal;
     text-align: center;
     font-size: 18px;
     box-sizing: border-box;
+    order: -1;
+  }
+
+  .kitty-bubble.show {
+    transform: none;
+  }
+
+  .kuromi.near .kuromi-prompt {
+    transform: none;
   }
 
   .kuromi-prompt {
