@@ -26,6 +26,7 @@ body {
   color: #fefdf8;
   font-family: "Inter", sans-serif;
   overflow-x: hidden;
+  width: 100%;
 }
 
 body.locked {
@@ -490,17 +491,11 @@ button:focus-visible {
 }
 
 /* =========================================================
-   FIXED PAPER CENTERING
+   PAPER CENTERING
 ========================================================= */
 
 .paper {
   position: relative;
-
-  /* IMPORTANT:
-     No left: 50%
-     No negative margin
-     The paper is centered naturally by auto margins.
-  */
 
   width: min(620px, 100%);
 
@@ -836,7 +831,7 @@ button:focus-visible {
 }
 
 /* =========================================================
-   KUROMI "TAP ME" BUBBLE
+   KUROMI TAP ME BUBBLE
 ========================================================= */
 
 .kuromi-prompt {
@@ -1315,30 +1310,52 @@ button:focus-visible {
 }
 
 /* =========================================================
-   RESPONSIVE
+   TABLET
 ========================================================= */
 
 @media (max-width: 1120px) {
+
   .char-slot {
+    position: relative;
+
     height: auto;
 
     padding:
-      4px 0 20px;
+      20px 0 35px;
 
     display: flex;
 
     justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    box-sizing: border-box;
   }
 
-  .char-inner {
-    position: static;
+  .char-inner,
+  .char-inner.right,
+  .char-inner.left {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
 
     width: 112px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
   }
 
   .kitty,
   .kuromi {
     width: 112px;
+    max-width: 112px;
   }
 
   .paper {
@@ -1351,14 +1368,43 @@ button:focus-visible {
   }
 }
 
+/* =========================================================
+   PHONE
+========================================================= */
+
 @media (max-width: 700px) {
-  .letter-scene {
-    padding:
-      50px 14px 90px;
+
+  /* Prevent any accidental horizontal positioning */
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
-  .paper {
+  /* LETTER SCENE */
+
+  .letter-scene {
     width: 100%;
+    max-width: 100%;
+
+    padding:
+      50px 14px 90px;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+  }
+
+  /* PAPER */
+
+  .paper {
+    position: relative;
+
+    width: 100%;
+    max-width: 620px;
 
     margin-left: auto;
     margin-right: auto;
@@ -1371,6 +1417,8 @@ button:focus-visible {
     border-radius: 12px;
   }
 
+  /* TEXT */
+
   .lp {
     font-size: 19px;
 
@@ -1381,23 +1429,86 @@ button:focus-visible {
     font-size: 29px;
   }
 
-  .char-inner.right,
-  .char-inner.left {
-    position: static;
-
-    margin:
-      10px auto 25px;
-  }
+  /* =====================================================
+     CENTER HELLO KITTY / KUROMI
+  ===================================================== */
 
   .char-slot {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+
     height: auto;
+
+    padding:
+      18px 0 38px;
+
+    margin: 0;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    overflow: visible;
   }
 
-  /* Kuromi bubble on mobile */
+  .char-inner,
+  .char-inner.right,
+  .char-inner.left {
+    position: relative;
 
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+
+    width: 112px;
+    max-width: 112px;
+
+    margin: 0 auto;
+
+    padding: 0;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+  }
+
+  .kitty,
+  .kuromi {
+    position: relative;
+
+    display: block;
+
+    width: 112px;
+    max-width: 112px;
+
+    height: auto;
+
+    margin: 0 auto;
+  }
+
+  /* =====================================================
+     CHARACTER BUBBLES
+  ===================================================== */
+
+  .kitty-bubble,
   .kuromi-prompt {
+    position: absolute;
+
     bottom:
       calc(100% + 8px);
+
+    left: 50%;
 
     max-width: 70vw;
 
@@ -1406,14 +1517,33 @@ button:focus-visible {
     text-align: center;
 
     font-size: 18px;
+
+    box-sizing: border-box;
   }
 
-  /* Center flower notification on mobile */
+  /* =====================================================
+     KUROMI MOBILE
+  ===================================================== */
+
+  .kuromi-prompt {
+    max-width: 70vw;
+
+    white-space: normal;
+
+    text-align: center;
+
+    line-height: 1.15;
+  }
+
+  /* =====================================================
+     FLOWER MESSAGE
+  ===================================================== */
 
   .flower-flight {
     width: 100vw;
-
     max-width: 100vw;
+
+    box-sizing: border-box;
   }
 
   .flower-msg {
@@ -1433,13 +1563,71 @@ button:focus-visible {
       16px 22px;
 
     border-radius: 20px;
+
+    box-sizing: border-box;
   }
+
+  /* =====================================================
+     ENDING
+  ===================================================== */
 
   .ending {
     min-height: 55vh;
 
     padding:
       90px 20px;
+
+    box-sizing: border-box;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .letter-scene {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .paper {
+    padding:
+      30px 18px;
+  }
+
+  .lp {
+    font-size: 18px;
+    line-height: 1.68;
+  }
+
+  .lp.greeting {
+    font-size: 27px;
+  }
+
+  .char-slot {
+    padding:
+      16px 0 34px;
+  }
+
+  .char-inner,
+  .char-inner.right,
+  .char-inner.left {
+    width: 105px;
+    max-width: 105px;
+  }
+
+  .kitty,
+  .kuromi {
+    width: 105px;
+    max-width: 105px;
+  }
+
+  .kitty-bubble,
+  .kuromi-prompt {
+    max-width: 68vw;
+    font-size: 17px;
   }
 }
 
@@ -1448,6 +1636,7 @@ button:focus-visible {
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
   .env-float,
   .tap-hint,
   .kitty,
