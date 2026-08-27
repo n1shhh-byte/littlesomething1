@@ -5,6 +5,7 @@ import Envelope from "./components/Envelope";
 import HelloKitty from "./components/HelloKitty";
 import Kuromi from "./components/Kuromi";
 import Ending from "./components/Ending";
+import MusicPanel from "./components/MusicPanel";
 import { playRustle } from "./audio";
 
 import "./App.css";
@@ -89,6 +90,8 @@ export default function App() {
   const [phase, setPhase] = useState("envelope");
   const [kittyWaving, setKittyWaving] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const endingRef = useRef(null);
   const audioRef = useRef(null);
@@ -246,19 +249,29 @@ export default function App() {
         </>
       )}
 
-      <button
-        type="button"
-        className={`music-toggle ${musicOn ? "on" : ""}`}
-        onClick={toggleMusic}
-        aria-label={musicOn ? "Turn music off" : "Turn music on"}
-      >
-        {musicOn ? "♫" : "♪"}
-      </button>
+      <div className="music-widget">
+        <button
+          type="button"
+          className={`music-toggle ${musicOn ? "on" : ""}`}
+          onClick={toggleMusic}
+          aria-label={musicOn ? "Turn music off" : "Turn music on"}
+        >
+          {musicOn ? "♫" : "♪"}
+        </button>
+
+        <MusicPanel
+          visible={musicOn}
+          currentTime={currentTime}
+          duration={duration}
+        />
+      </div>
 
       <audio
         ref={audioRef}
         loop
         preload="auto"
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       >
         <source
           src="/music.mp3"
