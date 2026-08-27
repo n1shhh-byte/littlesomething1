@@ -5,7 +5,6 @@ import Envelope from "./components/Envelope";
 import HelloKitty from "./components/HelloKitty";
 import Kuromi from "./components/Kuromi";
 import Ending from "./components/Ending";
-import MusicPanel from "./components/MusicPanel";
 import { playRustle } from "./audio";
 
 import "./App.css";
@@ -90,11 +89,12 @@ export default function App() {
   const [phase, setPhase] = useState("envelope");
   const [kittyWaving, setKittyWaving] = useState(false);
   const [musicOn, setMusicOn] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [showMusicBubble, setShowMusicBubble] = useState(false);
+  const [musicBubbleText, setMusicBubbleText] = useState("playing...");
 
   const endingRef = useRef(null);
   const audioRef = useRef(null);
+  const bubbleTimer = useRef(null);
 
   useEffect(() => {
     document.body.classList.toggle("locked", phase !== "letter");
@@ -103,6 +103,12 @@ export default function App() {
       document.body.classList.remove("locked");
     };
   }, [phase]);
+
+  useEffect(() => {
+    return () => {
+      if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
+    };
+  }, []);
 
   const openLetter = () => {
     if (phase !== "envelope") return;
@@ -135,16 +141,31 @@ export default function App() {
     };
   }, [phase]);
 
+  const flashMusicBubble = (text) => {
+    if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
+
+    setMusicBubbleText(text);
+    setShowMusicBubble(true);
+
+    bubbleTimer.current = setTimeout(() => {
+      setShowMusicBubble(false);
+    }, 2500);
+  };
+
   const toggleMusic = () => {
     if (!audioRef.current) return;
 
     if (musicOn) {
       audioRef.current.pause();
       setMusicOn(false);
+      flashMusicBubble("paused");
     } else {
       audioRef.current
         .play()
-        .then(() => setMusicOn(true))
+        .then(() => {
+          setMusicOn(true);
+          flashMusicBubble("playing...");
+        })
         .catch(() => {
           console.log("No music file found yet.");
         });
@@ -250,6 +271,13 @@ export default function App() {
       )}
 
       <div className="music-widget">
+        <div
+          className={`music-bubble ${showMusicBubble ? "show" : ""}`}
+          aria-hidden="true"
+        >
+          {musicBubbleText}
+        </div>
+
         <button
           type="button"
           className={`music-toggle ${musicOn ? "on" : ""}`}
@@ -258,20 +286,12 @@ export default function App() {
         >
           {musicOn ? "♫" : "♪"}
         </button>
-
-        <MusicPanel
-          visible={musicOn}
-          currentTime={currentTime}
-          duration={duration}
-        />
       </div>
 
       <audio
         ref={audioRef}
         loop
         preload="auto"
-        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       >
         <source
           src="/music.mp3"
